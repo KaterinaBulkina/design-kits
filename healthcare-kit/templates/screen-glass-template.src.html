@@ -1,0 +1,162 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:PJ;src:url(fonts/node_modules/@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2);font-weight:200 800}
+@font-face{font-family:SG;src:url(fonts/node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2);font-weight:300 700}
+@font-face{font-family:GM;src:url(fonts/node_modules/@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2);font-weight:100 900}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#0F1F1A;--sub:#5A6A62;--line:rgba(15,31,26,.09)}
+body{width:1600px;height:1000px;position:relative;overflow:hidden;font-family:PJ,sans-serif;color:var(--ink);font-size:13px;font-variant-numeric:tabular-nums;
+background:radial-gradient(900px 560px at 6% 0%,#D3E3DC 0,transparent 62%),radial-gradient(800px 520px at 100% 6%,#EADFC8 0,transparent 62%),radial-gradient(900px 600px at 72% 112%,#CAD7DF 0,transparent 62%),radial-gradient(700px 500px at 0% 100%,#DDE3D8 0,transparent 62%),#F1F4F2}
+body:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.07;mix-blend-mode:multiply;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.a{position:absolute}
+.glass{background:rgba(255,255,255,.64);backdrop-filter:blur(28px) saturate(1.4);border:1px solid rgba(255,255,255,.92);box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 24px 40px -20px rgba(15,45,38,.22),0 2px 6px -2px rgba(15,45,38,.08);border-radius:28px}
+.serif{font-family:SG,sans-serif;font-weight:500;letter-spacing:-.025em}
+.mono{font-family:GM,monospace;font-size:12px;color:var(--sub)}
+.pill{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:999px;font-weight:600;font-size:12px;white-space:nowrap}
+.p-amber{background:linear-gradient(180deg,#F8EBCB,#F2DDA6);color:#5E4208;box-shadow:0 1px 0 #fff inset,0 0 0 1px rgba(201,150,48,.4)}
+.p-teal{background:#E0EEE9;color:#14463B;box-shadow:0 0 0 1px rgba(20,70,59,.16)}
+.p-gray{background:rgba(15,31,26,.06);color:#46564E}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;font-weight:700;font-size:14px;white-space:nowrap}
+.b1{color:#fff;background:linear-gradient(180deg,#2B6E5F,#123A31);box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 12px 20px -8px rgba(15,50,42,.6)}
+.b2{background:rgba(255,255,255,.85);box-shadow:0 0 0 1px rgba(15,31,26,.12),0 1px 0 #fff inset;color:var(--ink)}
+.av{border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px #fff,0 3px 8px -2px rgba(15,31,26,.3)}
+svg{display:block;flex:none}
+.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.nav{display:flex;align-items:center;gap:10px;height:44px;padding:0 12px;border-radius:16px;font-weight:600;font-size:12px;color:#34453D;white-space:nowrap}
+.nav.on{color:#fff;background:linear-gradient(180deg,#2B6E5F,#123A31);box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 12px 18px -10px rgba(15,50,42,.65)}
+.card{height:100px;border-radius:24px;padding:18px 24px;position:absolute;top:124px;width:259.2px}
+.card .l{font-weight:600;font-size:13px;color:var(--sub)}
+.card .n{font-family:SG;font-weight:500;letter-spacing:-.025em;font-size:44px;line-height:1;margin-top:10px;display:flex;align-items:center;gap:10px}
+.card.sel{background:linear-gradient(160deg,#2C6A5C 0,#18463C 55%,#0F2F28 100%);box-shadow:0 1px 0 rgba(255,255,255,.22) inset,0 0 0 1px rgba(255,255,255,.12),0 22px 30px -16px rgba(15,47,40,.7)}
+.card.sel .l{color:#C3D9D1}.card.sel .n{color:#F6F2E8}
+.g>div{white-space:nowrap}
+.g{display:grid;grid-template-columns:120px 120px 120px 100px 164px 128px 96px;column-gap:4px;align-items:center}
+.row{flex:1;padding:0 16px;margin:0 12px;border-radius:22px}
+.row.sel{background:linear-gradient(90deg,#E6F0EC,#F4F8F6);box-shadow:0 0 0 1.5px #1F5A4B inset,0 14px 24px -14px rgba(20,70,59,.45)}
+.row:not(.sel){border-bottom:1px solid var(--line);border-radius:0;margin:0 28px;padding:0}
+.row.last{border-bottom:0}
+.b{font-weight:700}.s{color:var(--sub);font-size:12px}
+.field{height:44px;border-radius:14px;background:rgba(255,255,255,.9);box-shadow:0 0 0 1px rgba(15,31,26,.12) inset;display:flex;align-items:center;padding:0 16px;font-size:14px}
+#ov{display:none;position:absolute;inset:0;background:rgba(15,31,26,.34);align-items:center;justify-content:center}
+body.fail #ov{display:flex}
+</style></head><body>
+
+<!-- SIDEBAR -->
+<div class="a glass" style="left:24px;top:24px;width:192px;height:952px;padding:20px 8px;display:flex;flex-direction:column">
+  <div style="padding:0 12px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:36px;height:35px;background:linear-gradient(160deg,#2F7566,#123A31);-webkit-mask:url(__MARK__) center/contain no-repeat;mask:url(__MARK__) center/contain no-repeat"></div>
+      <div style="width:58px;height:25px;background:#0F1F1A;-webkit-mask:url(__WORD__) left center/contain no-repeat;mask:url(__WORD__) left center/contain no-repeat"></div>
+    </div>
+    <div style="color:var(--sub);font-size:12px;margin-top:8px">Northline Imaging</div>
+  </div>
+  <div style="font-size:10.5px;font-weight:700;letter-spacing:.09em;color:#7A8982;padding:0 12px;margin:32px 0 8px">PATIENT ACCESS</div>
+  <div style="display:flex;flex-direction:column;gap:4px">
+    <div class="nav"><svg class="ic" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>Imaging referrals</div>
+    <div class="nav on"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5L16 9.5"/></svg>Prior authorizations</div>
+    <div class="nav"><svg class="ic" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>Clinical documents</div>
+    <div class="nav"><svg class="ic" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M16 4.7a3.5 3.5 0 010 6.6M18 14.8c2 .6 3.2 2.3 3.5 5.2"/></svg>Referring practices</div>
+    <div class="nav"><svg class="ic" viewBox="0 0 24 24"><path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 00-5.7 0l-3 3A4 4 0 0011 18.7l1-1"/></svg>Payer connections</div>
+    <div class="nav"><svg class="ic" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/></svg>Authorization reports</div>
+  </div>
+  <div class="nav" style="margin-top:auto"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 01-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 010-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 014 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 010 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>Settings</div>
+</div>
+
+<!-- HEADER -->
+<div class="a" style="left:232px;top:24px;height:76px;display:flex;flex-direction:column;justify-content:center">
+  <div class="serif" style="font-size:34px;line-height:38px">Prior authorizations</div>
+  <div style="color:var(--sub);font-size:13.5px;margin-top:4px">Outpatient MRI and CT</div>
+</div>
+<div class="a" style="right:24px;top:24px;height:76px;display:flex;align-items:center;gap:12px">
+  <span class="pill p-gray" style="height:36px;padding:0 16px;font-size:12.5px">Wed, Nov 4, 2026</span>
+  <span class="pill p-teal" style="height:36px;padding:0 16px;font-size:12.5px"><span class="dot"></span>Payer updates checked at 09:12 ET</span>
+  <div style="width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.9);box-shadow:0 0 0 1px rgba(15,31,26,.1) inset;display:grid;place-items:center"><svg class="ic" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0112 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 004 0"/></svg></div>
+  <img class="av" src="maya.jpg" width="40" height="40" style="box-shadow:0 0 0 3px #fff,0 8px 16px -6px rgba(15,45,38,.4)">
+</div>
+
+<!-- CARDS -->
+<div class="card glass" style="left:232px"><div class="l">All imaging authorizations</div><div class="n">18</div></div>
+<div class="card sel" style="left:503.2px"><div class="l">Clinical info requested</div><div class="n">5</div></div>
+<div class="card glass" style="left:774.4px"><div class="l">Awaiting payer decision</div><div class="n">8</div></div>
+<div class="card glass" style="left:1045.6px"><div class="l">Approved</div><div class="n">3<span style="width:10px;height:10px;border-radius:50%;background:#2F8F6F;box-shadow:0 0 0 3px rgba(47,143,111,.18)"></span></div></div>
+<div class="card glass" style="left:1316.8px"><div class="l">Denied</div><div class="n">2<span style="width:10px;height:10px;border-radius:50%;background:#C2503F;box-shadow:0 0 0 3px rgba(194,80,63,.18)"></span></div></div>
+
+<!-- TABLE -->
+<div id="tbl" class="a glass" style="left:232px;top:248px;width:928px;height:728px;display:flex;flex-direction:column;padding:0">
+  <div style="height:72px;padding:0 28px;display:flex;align-items:center;gap:12px">
+    <div class="serif" style="font-size:20px;white-space:nowrap">Clinical info requested</div>
+    <span class="pill p-gray">5 authorizations</span>
+    <div style="margin-left:auto;display:flex;gap:12px;align-items:center">
+      <div class="field" style="width:268px;height:40px;border-radius:999px;color:var(--sub);gap:8px;font-size:12.5px;padding:0 14px;white-space:nowrap"><svg class="ic" style="width:15px;height:15px" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>Search authorization or patient ID</div>
+      <div class="field" style="height:40px;border-radius:999px;gap:8px;padding:0 14px 0 16px;font-size:12.5px;white-space:nowrap"><span style="color:var(--sub)">Sort by</span><span class="b">Team follow-up</span><svg class="ic" style="width:14px;height:14px" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+    </div>
+  </div>
+  <div class="g" style="height:44px;padding:0 28px;color:var(--sub);font-weight:600;font-size:12px;margin:0 0">
+    <div>Patient</div><div>Imaging service</div><div>Payer</div><div>Requested scan</div><div>Clinical document</div><div>Coordinator</div><div>Team follow-up</div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column">
+    <div class="row sel g"><div><div class="b">Patient ••4821</div><div class="mono">PA-261104-018</div></div><div class="b">MRI right knee</div><div><div>Aetna</div><div class="s">Commercial</div></div><div>Nov 5, 09:30</div><div><span class="pill p-amber"><span class="dot"></span>Signed visit note</span></div><div style="display:flex;align-items:center;gap:8px"><img class="av" src="maya.jpg" width="24" height="24">Maya Chen</div><div class="b">Today, 10:00</div></div>
+    <div class="row g"><div><div class="b">Patient ••7314</div><div class="mono">PA-261104-012</div></div><div class="b">MRI lumbar spine</div><div><div>Cigna</div><div class="s">Commercial</div></div><div>Nov 5, 11:00</div><div><span class="pill p-gray">Physical therapy notes</span></div><div style="display:flex;align-items:center;gap:8px"><img class="av" src="elena.jpg" width="24" height="24">Elena Ruiz</div><div class="b">Today, 11:00</div></div>
+    <div class="row g"><div><div class="b">Patient ••2906</div><div class="mono">PA-261104-015</div></div><div class="b">CT head</div><div><div>UnitedHealthcare</div><div class="s">Commercial</div></div><div>Nov 6, 10:15</div><div><span class="pill p-gray">Referring clinician note</span></div><div style="display:flex;align-items:center;gap:8px"><img class="av" src="maya.jpg" width="24" height="24">Maya Chen</div><div class="b">Today, 12:00</div></div>
+    <div class="row g"><div><div class="b">Patient ••6158</div><div class="mono">PA-261104-009</div></div><div class="b">MRI left shoulder</div><div><div>Aetna</div><div class="s">Commercial</div></div><div>Nov 6, 14:00</div><div><span class="pill p-gray">Orthopedic visit note</span></div><div style="display:flex;align-items:center;gap:8px"><img class="av" src="daniel.jpg" width="24" height="24">Daniel Brooks</div><div class="b">Today, 14:00</div></div>
+    <div class="row g last"><div><div class="b">Patient ••9043</div><div class="mono">PA-261104-006</div></div><div class="b">CT sinuses</div><div><div>Cigna</div><div class="s">Commercial</div></div><div>Nov 9, 09:00</div><div><span class="pill p-gray">Previous imaging report</span></div><div style="display:flex;align-items:center;gap:8px"><img class="av" src="elena.jpg" width="24" height="24">Elena Ruiz</div><div class="b">Today, 15:30</div></div>
+  </div>
+  <div style="height:64px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;color:var(--sub);font-size:12.5px;border-top:1px solid var(--line)"><span>Showing 5 of 5 authorizations</span><span>Follow-up times are set by the coordination team.</span></div>
+</div>
+
+<!-- PANEL -->
+<div id="pan" class="a glass" style="left:1176px;top:248px;width:400px;height:728px;padding:24px;display:flex;flex-direction:column;gap:12px">
+  <div style="display:flex;justify-content:space-between;align-items:center;height:20px"><span class="mono" style="font-size:12.5px">PA-261104-018</span><svg class="ic" style="width:18px;height:18px;color:var(--sub)" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></div>
+  <div>
+    <div class="serif" style="font-size:30px;line-height:33px">MRI right knee</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="color:var(--sub)">Patient ••4821</span><span class="pill p-amber" style="height:26px;font-size:11.5px">Clinical info requested</span></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;column-gap:16px;row-gap:6px;height:116px;border-top:1px solid var(--line);padding-top:8px">
+    <div><div class="s">Payer</div><div class="b" style="font-size:13px">Aetna Commercial</div></div>
+    <div><div class="s">Requested scan</div><div class="b" style="font-size:13px">Nov 5, 09:30</div></div>
+    <div><div class="s">Booking status</div><div class="b" style="font-size:13px">Not booked</div></div>
+    <div><div class="s">Coordinator</div><div class="b" style="font-size:13px">Maya Chen</div></div>
+    <div><div class="s">Payer response deadline</div><div class="b" style="font-size:13px">Not supplied</div></div>
+    <div><div class="s">Team follow-up</div><div class="b" style="font-size:13px">Today, 10:00</div></div>
+  </div>
+  <div style="height:120px;border-radius:24px;padding:16px 18px;position:relative;overflow:hidden;background:linear-gradient(135deg,#F7E6BE 0,#EBC882 60%,#DDAE55 100%);box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 0 0 1px rgba(255,255,255,.6),0 22px 30px -18px rgba(150,105,25,.6)">
+    <div style="position:absolute;right:-30px;top:-40px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.55),transparent 65%)"></div>
+    <div style="position:relative;display:flex;gap:12px;height:100%">
+      <div style="width:40px;height:40px;border-radius:14px;background:#fff;display:grid;place-items:center;box-shadow:0 8px 14px -6px rgba(122,74,0,.4);flex:none"><svg class="ic" style="stroke:#8A5A0A" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></div>
+      <div style="flex:1;min-width:0;padding-right:0"><div class="serif" style="font-size:20px;line-height:22px;color:#2A1D05;white-space:nowrap">Signed visit note needed</div>
+      <div style="color:#5A3F0C;font-size:12px;line-height:17px;margin-top:8px;white-space:nowrap">Requested by payer on Nov 3 at 15:10.<br>Referring clinician: Dr Nina Patel<br>Meridian Orthopedics</div></div>
+      <img class="av" src="patel.jpg" width="36" height="36" style="position:absolute;right:0;bottom:0">
+    </div>
+  </div>
+  <div style="height:106px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;height:22px"><span class="b" style="font-size:14px">Clinical documents</span><span class="s">2 of 3 attached</span></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;height:28px;border-bottom:1px solid var(--line)"><span>Imaging order</span><span class="pill p-teal" style="height:22px;font-size:11px;padding:0 10px">Attached</span></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;height:28px;border-bottom:1px solid var(--line)"><span>Specialist referral</span><span class="pill p-teal" style="height:22px;font-size:11px;padding:0 10px">Attached</span></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;height:28px"><span class="b">Signed visit note</span><span class="pill p-amber" style="height:22px;font-size:11px;padding:0 10px">Missing</span></div>
+  </div>
+  <div style="height:80px">
+    <div class="b" style="font-size:14px;height:22px">Submission history</div>
+    <div style="position:relative;padding-left:22px;margin-top:4px">
+      <div style="position:absolute;left:5px;top:8px;height:28px;width:2px;background:linear-gradient(#D9A441,rgba(15,31,26,.16))"></div>
+      <div style="position:relative;height:27px;display:flex;justify-content:space-between;align-items:center"><span style="position:absolute;left:-22px;top:9px;width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px #D9A441"></span><span class="b" style="font-size:12.5px">Clinical information requested</span><span class="mono" style="font-size:11.5px">Nov 3, 15:10</span></div>
+      <div style="position:relative;height:27px;display:flex;justify-content:space-between;align-items:center"><span style="position:absolute;left:-22px;top:9px;width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px #C5CFC9"></span><span class="b" style="font-size:12.5px">Submission acknowledged</span><span class="mono" style="font-size:11.5px">Nov 2, 10:42</span></div>
+    </div>
+  </div>
+  <div style="margin-top:auto;display:flex;flex-direction:column;gap:8px">
+    <div class="btn b1" style="height:48px;width:100%"><svg class="ic" style="stroke:#fff" viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>Request signed visit note</div>
+    <div class="btn b2" style="height:40px;width:100%;font-size:13.5px">Open authorization</div>
+  </div>
+</div>
+
+<!-- DIALOG -->
+<div id="ov">
+  <div id="dlg" class="glass" style="width:648px;padding:32px;background:rgba(255,255,255,.94);border-radius:32px;box-shadow:0 1px 0 #fff inset,0 40px 80px -24px rgba(15,31,26,.55)">
+    <div class="serif" style="font-size:28px;line-height:31px">Request signed visit note</div>
+    <div style="margin-top:24px"><div class="s" style="font-weight:600;margin-bottom:6px">To</div><div class="field">Dr Nina Patel, Meridian Orthopedics</div></div>
+    <div style="margin-top:16px"><div class="s" style="font-weight:600;margin-bottom:6px">Message</div><div class="field" style="height:84px;align-items:flex-start;padding-top:14px;line-height:22px;border-radius:16px">Please send the signed visit note for Patient ••4821, MRI right knee, authorization PA-261104-018.</div></div>
+    <div style="margin-top:16px;height:52px;border-radius:16px;background:#F7E4E0;box-shadow:0 0 0 1px rgba(170,60,45,.28) inset;color:#8A2B20;display:flex;align-items:center;gap:12px;padding:0 16px;font-weight:600;font-size:13.5px"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg>Signed visit note request could not be sent. Try again.</div>
+    <div style="margin-top:24px;display:flex;justify-content:flex-end;gap:12px"><div class="btn b2" style="height:48px;padding:0 28px">Cancel</div><div class="btn b1" style="height:48px;padding:0 28px">Retry note request</div></div>
+  </div>
+</div>
+<script>if(location.hash=='#fail')document.body.classList.add('fail')</script>
+</body></html>
