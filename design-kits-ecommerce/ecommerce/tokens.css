@@ -1,0 +1,15 @@
+/* Ecommerce kit tokens (Ember sample brand). Source of truth: шаблоны carry a copy of this :root block. */
+:root{
+--brand:#4D0E12;--brand-deep:#442627;--brand-ink:#F5EFC6;--accent-soft:#F5EFC6;
+--ink:#231815;--body:#5A4B3E;--sub:#7D6F62;--mute:#8C7F70;
+--line:#EDE8DB;--line-strong:#DAD3BF;--tile:#F6F2E4;--page:#FFFFFF;
+--ok:#2E6A3B;--warn:#9B3A22;
+--r-input:10px;--r-tile:12px;--r-panel:16px;--r-modal:18px}
+
+/* Типографика: Schibsted Grotesk, один шрифт на всё.
+   h1 страницы   36/40, 650, letter-spacing -.03em
+   h2 панели     17/22, 650
+   тело          13.5/18, 400-550
+   мелкий текст  12.5/18, цвет --mute
+   цена в строке 16.5, 650; итого 28, 700, letter-spacing -.025em
+   Цифры: без tabular-nums (у Schibsted широкая точка). */
