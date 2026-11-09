@@ -1,0 +1,21 @@
+/* Nivalis Building Operations design kit tokens */
+:root{
+  /* surfaces */
+  --frame:#EEF2F5; --sect:#F3F5F7; --white:#FFFFFF; --line:#E3E8EC; --line-strong:#D5DDE2;
+  /* text */
+  --ink:#11181C; --muted:#55616B; --faint:#66727C;
+  /* brand */
+  --petrol:#0C4A5C;            /* dark hero on main pages, key lines in charts */
+  --aqua-from:#CFE9EC; --aqua-to:#EEF8F7; --aqua-line:#BBDDE2; --aqua-ink:#0A3B49;  /* light hero on secondary pages */
+  --live-line:#8CC6CF;         /* active process container */
+  /* signal */
+  --coral:#FF8A78;             /* deviation, forecast, focus on dark */
+  --red:#D6432C; --crit-bg:#FFE4DE; --crit-ink:#8A1C0F;
+  --warn-bg:#FFEBC9; --warn-ink:#6B3F00;
+  --ok:#1B6B3A; --ok-bg:#EAF6EE; --ok-ink:#12452A;
+  /* type */
+  --disp:'Bricolage Grotesque','Onest',sans-serif;   /* titles and key figures, 500 to 700 */
+  --ui:'Onest',system-ui,sans-serif;                 /* UI text, 400 to 600 */
+  /* radii */
+  --r-page:24px; --r-hero:20px; --r-card:18px; --r-btn:13px; --r-tag:7px;
+}

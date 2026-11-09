@@ -1,0 +1,256 @@
+
+    import os
+    ST=os.environ.get('ACT_STATE','pending'); AP=ST!='pending'; PERM=ST!='approved-noperm'; QU=ST=='queued'
+    NOWT='Fri, Nov 6, 10:26 EST' if AP else NOW
+    DASH='stroke-dasharray="6 5"' if AP else ''
+    PT='51.7 kW projected' if AP else '51.7 kW'
+    PWH=128 if AP else 72
+    TICKS=[(0,'10:11',0),(15,'Now',1),(30,'10:41',0),(60,'11:11',0)] if AP else [(0,'10:09',0),(15,'Now',1),(30,'10:39',0),(45,'10:54',0),(60,'11:09',0)]
+    chk=[('Target and limits','Both evaporators are approved for backup mode.','Passed','#DDF1E4','#1B6B3A',True,[('Equipment','EVAP-FZB-02 and EVAP-FZB-03'),('Run time','30 min, within the 30 min limit'),('Active interlocks','None'),('Controller limits','Request matches')]),
+         ('Policy','POL-COLD-07 allows backup mode in Frozen Zone B.','Passed','#DDF1E4','#1B6B3A',False,[]),
+         ('Rollback','Stop sequence and restore previous controller state.','Passed','#DDF1E4','#1B6B3A',False,[]),
+         ('Verification','Acknowledgement is not success. Airflow response within 3 min is checked on site.','After run','#DCEBF1','#0C4A5C',False,[])]
+    def acc(a,d,s,bg,fg,op,det):
+        chev=icon("chevdown" if op else "chevright",18,1.75)
+        body=''.join(f'<div class="kvr"><span>{k}</span><b>{v}</b></div>' for k,v in det)
+        return f'<div class="ac {"open" if op else ""}"><div class="ah"><span class="cv2">{chev}</span><div class="at"><b>{a}</b><em>{d}</em></div><span class="cnt" style="background:{bg};color:{fg}">{s}</span></div>{"<div class=ab>"+body+"</div>" if op else ""}</div>'
+    chk_h=''.join(acc(*c) for c in chk)
+    cnt_t='3 passed, 1 after run'
+    if AP:
+        cnt_t='3 passed, 1 pending'
+        def gh(a,b): return f'<div class="gh"><span>{a}</span><span>{b}</span></div>'
+        G='#DDF1E4','#1B6B3A'
+        A=[('Target and limits','Both evaporators are approved for backup mode.','Passed',*G,False,[]),
+           ('Policy','POL-COLD-07 allows backup mode in Frozen Zone B.','Passed',*G,False,[]),
+           ('Rollback','Stop sequence and restore previous controller state.','Passed',*G,False,[]),
+           ('Verification','Physical airflow check has not started. It begins after dispatch.','Pending','#DCEBF1','#0C4A5C',False,[])]
+        rec='<div class="ar"><div class="ar1"><span class="ck2"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5 7.5 13 14 5.5"/></svg></span><div class="at2"><b>Approved by Felix Whitaker</b><span>Facility Operations Manager</span></div><div class="tm"><b>10:25 EST</b><span>Fri, Nov 6</span></div></div><div class="as2"><div><span>Policy</span><b>POL-COLD-07, Passed</b></div><div><span>Approved parameters</span><b><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#1B6B3A" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><rect x="2.5" y="6" width="9" height="6" rx="1.8"/><path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6"/></svg>Locked</b></div><div><span>Next step</span><b>Awaiting dispatch</b></div></div></div>'
+        chk_h=rec+gh('Before execution','Completed')+''.join(acc(*a) for a in A[:3])+gh('After dispatch','Pending')+acc(*A[3])
+    pills=('<span class="pill ok">Approved</span><span class="pill act">Awaiting dispatch</span>' if AP else '<span class="pill warn">Approval required</span>')+'<span class="cnt">ACT-1184</span>'
+    if QU: pills='<span class="pill qu">Queued</span><span class="cnt">ACT-1184</span>'
+    AEV='Calculated after dispatch' if AP else '10:54'
+    C2=('Controller state','No command sent') if AP else ('Approver','Felix Whitaker, Facility Operations')
+    PROJ='Projected' if AP else 'If approved'
+    if QU:
+        C2=('Controller state','Queued, not sent')
+        LH2='Execution'; cnt_t='Queued'
+        chk_s='<svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5 7.5 13 14 5.5"/></svg>'
+        tl=[('Approved','Felix Whitaker','10:25:00','done'),('Queued','Luis Ortega','10:26:00','cur'),('Sent','','Pending','pend'),('Controller acknowledgement','','Pending','pend'),('Physical verification','','Pending','pend')]
+        def mk(s):
+            if s=='done': return '<span class="mk d">'+chk_s+'</span>'
+            if s=='cur': return '<span class="mk c">'+icon("clock",15,2)+'</span>'
+            return '<span class="mk p"></span>'
+        tlh=''.join(f'<div class="tr {s}"><span class="mkw">{mk(s)}</span><b>{a}</b><span class="ac2">{w}</span><span class="tt2">{tm}</span></div>' for a,w,tm,s in tl)
+        banner='<div class="qb"><div class="qb1"><span class="ck3">'+icon("clock",18,2)+'</span><div class="at2"><b>ACT-1184 has been queued for dispatch.</b><span>The approved command is waiting for the control integration to send it to CTRL-FZB-03. No controller acknowledgement has been received.</span></div></div></div>'
+        G2='#DDF1E4','#1B6B3A'
+        tl_h=banner+'<div class="tl">'+tlh+'</div>'
+        chk_h=acc('Approval record','Felix Whitaker, 10:25 EST. Parameters locked.','Locked',*G2,False,[])+acc('Policy checklist','3 passed, 1 pending after dispatch.','Read only','#E8ECEF','#3A4650',False,[])
+    else:
+        LH2='Policy checklist'
+    NOWKW,ADD,CAPKW=48.2,3.5,66.8
+    PK=lambda v:v/CAPKW*100
+    em_,ebl_,ea_,ek_,ep_=energy_solve()
+    def fchart(W=440,H=262):
+        PL_,PR_,TT_,BB_=38,16,30,H-34
+        x0,x1=0,60
+        X=lambda m:PL_+(m-x0)/(x1-x0)*(W-PL_-PR_)
+        Y=lambda v:TT_+(70-v)/30*(BB_-TT_)
+        def smooth(pts):
+            d=f'M{pts[0][0]:.1f} {pts[0][1]:.1f}'
+            for k in range(len(pts)-1):
+                p0=pts[max(k-1,0)];p1=pts[k];p2=pts[k+1];p3=pts[min(k+2,len(pts)-1)]
+                c1=(p1[0]+(p2[0]-p0[0])/6,p1[1]+(p2[1]-p0[1])/6);c2=(p2[0]-(p3[0]-p1[0])/6,p2[1]-(p3[1]-p1[1])/6)
+                d+=f' C{c1[0]:.1f} {c1[1]:.1f} {c2[0]:.1f} {c2[1]:.1f} {p2[0]:.1f} {p2[1]:.1f}'
+            return d
+        o=[f'<svg width="{W}" height="{H}" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" font-family="Onest, sans-serif">',
+           '<defs><linearGradient id="gh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0C4A5C" stop-opacity=".16"/><stop offset="1" stop-color="#0C4A5C" stop-opacity="0"/></linearGradient>'
+           '<linearGradient id="gf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E5543B" stop-opacity=".30"/><stop offset="1" stop-color="#E5543B" stop-opacity=".06"/></linearGradient>'
+           '<linearGradient id="gr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1B6B3A" stop-opacity=".02"/><stop offset="1" stop-color="#1B6B3A" stop-opacity=".14"/></linearGradient><pattern id="hp" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" stroke="#E5543B" stroke-opacity=".28" stroke-width="1.4"/></pattern></defs>']
+        for v in (40,50,60):
+            o.append(f'<line x1="{PL_}" x2="{W-PR_}" y1="{Y(v):.1f}" y2="{Y(v):.1f}" stroke="#EDF0F2"/>')
+        for v in (40,50,60,70):
+            o.append(f'<text x="{PL_-10}" y="{Y(v)+4:.1f}" font-size="11.5" text-anchor="end" fill="#8995A0">{v}</text>')
+        o.append(f'<line x1="{PL_}" x2="{W-PR_}" y1="{Y(66.8):.1f}" y2="{Y(66.8):.1f}" stroke="#E5543B" stroke-opacity=".7" stroke-width="1.4"/>')
+        o.append(f'<text x="{W-PR_-6}" y="{Y(66.8)-7:.1f}" font-size="11.5" font-weight="600" text-anchor="end" fill="#B3321F">Capacity 66.8 kW</text>')
+        hist=[float(v) for v in ea_[-8:]]; hx=[15*k/7 for k in range(8)]
+        hp=[(X(a),Y(b)) for a,b in zip(hx,hist)]
+        o.append(f'<path d="{smooth(hp)} L{X(15):.1f} {BB_} L{X(0):.1f} {BB_} Z" fill="url(#gh)"/>')
+        base=Y(48.2); top=Y(51.7)
+        fp=[(X(15),base),(X(17),top),(X(43),top),(X(45),base)]
+        o.append(f'<path d="M{X(15):.1f} {base:.1f} C{X(16.5):.1f} {base:.1f} {X(15.5):.1f} {top:.1f} {X(18):.1f} {top:.1f} L{X(42):.1f} {top:.1f} C{X(44.5):.1f} {top:.1f} {X(43.5):.1f} {base:.1f} {X(45):.1f} {base:.1f} Z" fill="{'#E5543B' if AP else 'url(#gf)'}" fill-opacity="{'.07' if AP else '1'}"/>')
+        o.append(f'<path d="M{X(15):.1f} {base:.1f} L{W-PR_} {base:.1f}" stroke="#8A9AA5" stroke-width="1.5" stroke-dasharray="1.5 4" fill="none" stroke-linecap="round"/>')
+        o.append(f'<path d="M{X(15):.1f} {base:.1f} C{X(16.5):.1f} {base:.1f} {X(15.5):.1f} {top:.1f} {X(18):.1f} {top:.1f} L{X(42):.1f} {top:.1f} C{X(44.5):.1f} {top:.1f} {X(43.5):.1f} {base:.1f} {X(45):.1f} {base:.1f}" stroke="#E5543B" stroke-width="2.4" {DASH} fill="none" stroke-linecap="round" stroke-linejoin="round"/>')
+        o.append(f'<path d="{smooth(hp)}" stroke="#0C4A5C" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>')
+        o.append(f'<line x1="{X(15):.1f}" x2="{X(15):.1f}" y1="{TT_-6}" y2="{BB_}" stroke="#11181C" stroke-opacity=".22" stroke-dasharray="3 4"/>')
+        o.append(f'<circle cx="{X(15):.1f}" cy="{base:.1f}" r="9" fill="#0C4A5C" fill-opacity=".14"/><circle cx="{X(15):.1f}" cy="{base:.1f}" r="4.8" fill="#fff" stroke="#0C4A5C" stroke-width="2.4"/>')
+        if not AP: o.append(f'<circle cx="{X(45):.1f}" cy="{base:.1f}" r="4" fill="#fff" stroke="#8A9AA5" stroke-width="2"/>')
+        cx=X(30)
+        o.append(f'<rect x="{cx-PWH/2:.1f}" y="{top-34:.1f}" width="{PWH}" height="24" rx="12" fill="#FFE9E3"/><text x="{cx:.1f}" y="{top-17.5:.1f}" font-size="12.5" font-weight="600" text-anchor="middle" fill="#B3321F">{PT}</text>')
+        for m,l,b in TICKS:
+            if b: o.append(f'<rect x="{X(m)-19:.1f}" y="{H-27}" width="38" height="20" rx="10" fill="#11181C"/><text x="{X(m):.1f}" y="{H-12.5}" font-size="11.5" text-anchor="middle" fill="#fff" font-weight="600">{l}</text>')
+            else: o.append(f'<text x="{X(m):.1f}" y="{H-12}" font-size="11.5" text-anchor="middle" fill="#8995A0">{l}</text>')
+        o.append('</svg>')
+        return ''.join(o)
+    css+="""
+.e6{margin-top:16px;display:grid;grid-template-columns:1.55fr 1fr;gap:16px;height:546px}
+.pa{margin-top:16px;height:254px}
+.pa .inner{flex-direction:row;align-items:stretch}
+.pl{width:520px;padding:26px 30px;border-right:1px solid #EEF1F3;display:flex;flex-direction:column}
+.pl .k{font-size:13px;color:var(--faint)} .pl b{display:block;font-family:var(--disp);font-size:28px;line-height:32px;font-weight:600;letter-spacing:-.025em;margin-top:6px} .pl p{font-size:15.5px;line-height:23px;color:var(--muted);margin-top:10px}
+.pg{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr}
+.pg div{padding:6px 30px;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid #EEF1F3;border-left:1px solid #EEF1F3} .pg div:nth-child(odd){border-left:0} .pg div:nth-last-child(-n+2){border-bottom:0}
+.pg span{font-size:13px;color:var(--faint)} .pg b{font-size:17px;line-height:23px;font-weight:600;margin-top:5px}
+.ac{border-bottom:1px solid #EEF1F3;padding:0 20px} .ac:last-child{border-bottom:0}
+.ah{display:flex;align-items:center;gap:14px;min-height:70px} .cv2{width:30px;height:30px;border-radius:9px;background:#F3F5F7;display:flex;align-items:center;justify-content:center;color:#3B4750;flex:none}
+.at{flex:1} .at b{display:block;font-size:17px;line-height:23px;font-weight:600} .at em{display:block;font-style:normal;font-size:14px;line-height:20px;color:var(--muted);margin-top:2px}
+.ab{margin:0 0 16px 44px;border-radius:12px;background:#F6F8F9;padding:4px 18px}
+.kvr{display:flex;justify-content:space-between;align-items:center;height:42px;border-bottom:1px solid #E9EDF0;font-size:14.5px} .kvr:last-child{border-bottom:0} .kvr span{color:var(--muted)} .kvr b{font-weight:600;text-align:right}
+.top .pill.warn{background:#FFE9DA;color:#8A3B0B}
+.e6 td{height:106px;padding-left:20px} .e6 th{height:42px;font-size:13px;padding-left:20px}
+td.id b{display:block;font-size:17px;line-height:23px;font-weight:600} td.id em{display:block;font-style:normal;font-size:14px;line-height:20px;color:var(--muted);margin-top:2px;white-space:normal}
+.e6 .cnt{height:28px;line-height:28px;font-size:13px;font-weight:600;padding:0 13px}
+.sub0{padding:0 14px 10px;font-size:14px;color:var(--muted)}
+.rk{margin:16px;border-radius:14px;position:relative;overflow:hidden;background:linear-gradient(120deg,#CFE9EC 0%,#E3F3F2 55%,#EEF8F7 100%);box-shadow:inset 0 0 0 1px #BBDDE2;padding:16px 20px 16px}
+.rk .rt{display:flex;align-items:center;gap:12px;font-size:16px;color:var(--ink)} .rk:before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(12,74,92,.07) 0 1px,transparent 1px 10px);-webkit-mask-image:linear-gradient(100deg,transparent 20%,#000 90%);mask-image:linear-gradient(100deg,transparent 20%,#000 90%)} .rk>*{position:relative} .rk .rt .ic{color:#0C4A5C} .rk .rt b{font-weight:600}
+.rk .tr3{position:relative;height:18px;border-radius:5px;-webkit-mask:repeating-linear-gradient(90deg,#000 0 7px,transparent 7px 10px);mask:repeating-linear-gradient(90deg,#000 0 7px,transparent 7px 10px);background:rgba(12,74,92,.16);margin-top:20px}
+.rk .tr3 i{position:absolute;top:0;height:100%} .rk .tr3 .a{left:0;background:var(--petrol)} .rk .tr3 .b{background:#E5543B}
+.rk .lbs{position:relative;height:50px;margin-top:10px;font-size:13px;color:var(--muted)} .rk .lbs span{position:absolute;white-space:nowrap;color:#4A6872} .rk .lbs b{display:block;font-family:var(--disp);font-size:22px;line-height:26px;letter-spacing:-.01em;color:#0A3A47;font-weight:600}
+.hero5{position:relative;border-radius:22px;background:var(--petrol);color:#fff;overflow:hidden;padding:24px 28px 0;display:flex;flex-direction:column}
+.hero5:before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.075) 0 1px,transparent 1px 10px);-webkit-mask-image:linear-gradient(100deg,transparent 18%,#000 80%);mask-image:linear-gradient(100deg,transparent 18%,#000 80%)}
+.hero5:after{content:'';position:absolute;left:-40px;top:20px;width:420px;height:260px;background:radial-gradient(closest-side,rgba(96,214,232,.30),rgba(96,214,232,0));pointer-events:none}
+.hero5>*{position:relative;z-index:1}
+.hero5 .hd b{display:block;font-size:20px;font-weight:600;line-height:26px;letter-spacing:-.01em} .hero5 .hd span{display:block;font-size:13px;color:rgba(255,255,255,.72);line-height:18px;margin-top:2px}
+.hero5 .fg{font-family:var(--disp);font-weight:600;font-size:92px;line-height:96px;letter-spacing:-.035em;margin-top:16px} .hero5 .fg .u{font-size:30px;letter-spacing:0;margin-left:10px;color:rgba(255,255,255,.78);font-weight:500;position:relative;top:-34px}
+.hero5 .cv{font-size:15.5px;line-height:23px;color:rgba(255,255,255,.88);margin-top:6px}
+.h4s{margin-top:auto;margin-left:-28px;margin-right:-28px;border-top:1px solid rgba(255,255,255,.16)}
+.h4s div{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:62px;border-top:1px solid rgba(255,255,255,.16)} .h4s div:first-child{border-top:0}
+.h4s span{font-size:13.5px;color:rgba(255,255,255,.72)} .h4s b{font-family:var(--disp);font-weight:600;font-size:20px;letter-spacing:-.01em}
+.cb{width:22px;height:22px;border:1.5px solid #8A97A1;border-radius:6px;background:#fff;flex:none}
+.dsub2{padding:4px 22px 6px;font-size:14px;font-weight:600}
+.btn.dis{opacity:.45}
+.top .pill.ok{background:#DDF1E4;color:#1B6B3A}
+.gh{display:flex;justify-content:space-between;padding:12px 20px 6px;font-size:12.5px;font-weight:600;color:var(--faint);border-bottom:1px solid #EEF1F3}
+.ar{margin:14px 14px 4px;border-radius:14px;background:#EAF6EE;padding:16px 20px 14px}
+.ar1{display:flex;align-items:center;gap:14px}
+.ck2{width:36px;height:36px;border-radius:50%;background:#1B6B3A;display:flex;align-items:center;justify-content:center;flex:none}
+.at2{flex:1} .at2 b{display:block;font-family:var(--disp);font-size:20px;line-height:25px;font-weight:600;color:#12351F;letter-spacing:-.01em} .at2 span{display:block;font-size:13.5px;line-height:19px;color:#4C6A57;margin-top:1px}
+.tm{text-align:right} .tm b{display:block;font-family:var(--disp);font-size:20px;line-height:25px;font-weight:600;color:#12351F} .tm span{display:block;font-size:13.5px;line-height:19px;color:#4C6A57;margin-top:1px}
+.as2{display:flex;margin-top:14px;border-top:1px solid rgba(27,107,58,.18);padding-top:10px} .as2>div{flex:1;border-left:1px solid rgba(27,107,58,.18);padding-left:16px} .as2>div:first-child{border-left:0;padding-left:0}
+.as2 span{display:block;font-size:12.5px;color:#4C6A57;line-height:17px} .as2 b{display:block;font-size:15px;line-height:21px;font-weight:600;color:#12351F;margin-top:1px}
+.top .pill.qu{background:#DCEBF1;color:#0C4A5C}
+.qb{margin:12px 14px 0;border-radius:14px;background:#EAF1F5;padding:12px 18px}
+.qb1{display:flex;gap:14px;align-items:flex-start}
+.ck3{width:36px;height:36px;border-radius:50%;background:#0C4A5C;color:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.qb .at2 b{color:#0A3A47;font-size:18px;line-height:24px} .qb .at2 span{color:#4A6872;font-size:13.5px;line-height:19px;margin-top:3px}
+.tl{margin:6px 14px 4px;padding:0 6px}
+.live{position:relative;overflow:hidden;background:linear-gradient(120deg,#CFE9EC 0%,#E3F3F2 55%,#EEF8F7 100%);box-shadow:inset 0 0 0 1px #BBDDE2}
+.live:before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(12,74,92,.07) 0 1px,transparent 1px 10px);-webkit-mask-image:linear-gradient(100deg,transparent 30%,#000 95%);mask-image:linear-gradient(100deg,transparent 30%,#000 95%);pointer-events:none}
+.live>*{position:relative}
+.live .sh h2{color:#0A3A47} .live .sh .cnt{background:#0C4A5C;color:#fff}
+.lcol .ah{min-height:56px} .lcol{display:flex;flex-direction:column;gap:12px;min-height:0} .lcol>.sect:first-child{flex:none} .lcol>.sect:last-child{flex:1}
+.tr{position:relative;display:grid;grid-template-columns:46px 1fr 150px 84px;align-items:center;height:36px;font-size:14.5px}
+.tr b{font-weight:600;color:var(--ink)} .tr .ac2{color:var(--muted)} .tr .tt2{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.tr.pend b{color:var(--muted);font-weight:500} .tr.pend .tt2{color:var(--faint);font-weight:500}
+.mkw{position:relative;display:flex;justify-content:center}
+.mk{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;box-sizing:border-box}
+.mk.d{background:#1B6B3A} .mk.c{background:#0C4A5C;color:#fff} .mk.p{background:#fff;border:2px solid #C7D0D6}
+.tr:not(:last-child) .mkw:after{content:'';position:absolute;left:50%;top:30px;height:26px;border-left:2px solid #C7D0D6;transform:translateX(-1px)}
+.tr.done .mkw:after{border-left-color:#1B6B3A}
+.tr.cur .mkw:after,.tr.pend .mkw:after{border-left-style:dashed}
+.apv .ah{min-height:60px} .apv .at em{font-size:13.5px;line-height:19px}
+.foot3{padding:14px 22px;font-size:14px;line-height:21px;color:var(--muted);border-top:1px solid #EEF1F3} .foot3 b{color:var(--ink);font-weight:600}
+"""
+    if AP:
+        perm_btn='<span class="btn p">Send action to controller'+icon("arrow",16,1.75)+'</span>' if PERM else '<span class="btn p dis">Send action to controller</span>'
+        exec_line='Authorized executor: Luis Ortega, Control-room Operator.' if PERM else 'Execution permission required. Authorized executor: Luis Ortega, Control-room Operator.'
+        bar_html=f'<div class="bar"><div class="tx"><b style="font-weight:600">ACT-1184 is approved and ready for dispatch.</b> <span>Equipment has not been changed.</span><span style="display:block;font-size:13px;margin-top:2px;color:var(--faint)">{exec_line}</span></div><div class="bs"><span class="btn o">Review approval</span>{perm_btn}</div></div>'
+    if QU:
+        bar_html='<div class="bar" style="height:78px"><div class="tx" style="white-space:normal;width:560px;line-height:19px"><b style="font-weight:600">ACT-1184 is queued.</b> <span>Equipment has not been changed.</span><span style="display:block;font-size:13px;margin-top:2px;color:var(--faint)">Dispatch is cancelled if authorization expires, controller freshness fails or safety policy changes before sending.</span></div><div class="bs"><span class="btn o">Review approval</span><span class="btn p dis">'+icon("clock",16,1.75)+'Dispatch pending</span></div></div>'
+    elif not AP:
+        bar_html='''<div class="bar"><div class="cb"></div><div class="tx"><b style="font-weight:600">I reviewed the checklist. The backup action is allowed and bounded.</b><span style="display:block;font-size:13px;margin-top:2px">Parameters and policy version are stored with the approval.</span></div><div class="bs"><span class="btn o">Reject proposal</span><span class="btn p dis">Approve ACT-1184{icon("arrow",16,1.75)}</span></div></div>'''
+    left_html=f'''<section class="sect"><div class="sh"><div class="lft"><h2>{LH2}</h2><span class="cnt">{cnt_t}</span></div></div>
+   <div class="inner {'apv' if AP else ''}" style="overflow:hidden">{chk_h}</div></section>'''
+    if QU:
+        left_html=f'''<div class="lcol"><section class="sect live"><div class="sh"><div class="lft"><h2>Execution</h2><span class="cnt">Queued</span></div></div><div class="inner">{tl_h}</div></section><section class="sect"><div class="sh"><div class="lft"><h2>Approval and policy</h2><span class="cnt">Read-only</span></div></div><div class="inner">{chk_h}</div></section></div>'''
+    body=f'''
+<aside class="side"><img class="logo" src="{LOGO}" alt="Nivalis Building Operations">
+ <div class="org"><div><b>Harlow Cold Logistics</b><span>Organization</span></div><span class="ud"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 6.5 8 3l3.5 3.5M4.5 9.5 8 13l3.5-3.5"/></svg></span></div>
+ <div class="navs">{nav}</div>
+ <div class="sync">Data synced<b>{NOWT}</b></div></aside>
+<main class="sheet">
+ <div class="top"><div class="l"><span class="back">{icon("arrow",18)}</span><h1>EXC-2417 / Remote action</h1>{pills}</div>
+  <div class="r"><span class="sel dtb">{icon("clock",16)}{NOWT}</span><span class="bell">{icon("bell",18)}<i>1</i></span></div></div>
+ <section class="sect pa"><div class="sh"><div class="lft"><h2>Proposed action</h2></div><span style="font-size:13px;color:var(--faint)">Proposed by System assessment, 10:12</span></div>
+  <div class="inner"><div class="pl"><span class="k">Remote action</span><b>Activate backup evaporator mode</b><p>Run backup evaporator sequence for <span style="white-space:nowrap">EVAP-FZB-02</span> and <span style="white-space:nowrap">EVAP-FZB-03</span> for up to 30 minutes while EF-3 is inspected.</p></div>
+   <div class="pg"><div><span>Zone</span><b>Frozen Zone B</b></div><div><span>Maximum run time</span><b>30 min</b></div><div><span>Automatic end</span><b>{AEV}</b></div><div><span>{C2[0]}</span><b>{C2[1]}</b></div><div><span>Controller</span><b>CTRL-FZB-03</b></div><div><span>Setpoint and interlocks</span><b>No changes</b></div></div></div></section>
+ <div class="e6">
+  {left_html}
+  <section class="sect"><div class="sh"><div class="lft"><h2>Demand impact</h2></div></div>
+   <div class="inner"><div class="rk" style="margin:16px"><div class="rt">{icon("activity",22,1.75)}<span><b>Low risk:</b> +{ADD} kW, {CAPKW-NOWKW-ADD:.1f} kW below capacity.</span></div>
+     <div class="tr3"><i class="a" style="width:{PK(NOWKW):.2f}%"></i><i class="b" style="left:{PK(NOWKW):.2f}%;width:{PK(ADD):.2f}%"></i></div>
+     <div class="lbs"><span style="left:0"><b>{NOWKW} kW</b>Now</span><span style="right:128px;text-align:right"><b>{NOWKW+ADD:.1f} kW</b>{PROJ}</span><span style="right:0;text-align:right"><b>{CAPKW} kW</b>Capacity</span></div></div>
+    <div class="dsub2">Expected demand, kW</div><div style="padding:0 16px">{fchart()}</div>
+</div></section>
+ </div>
+</main>
+<div class="fade"></div>
+{bar_html}
+'''
+    return f'<!doctype html><html><head><meta charset="utf-8"><style>{css}</style></head><body>{body}</body></html>'
+if __name__=='__main__':
+    render(build(),f'{ROOT}/out/action-desktop.png',1600,1000,1.6)
+    MCSS="""<style>
+.scrim{position:absolute;inset:0;z-index:20;background:rgba(14,30,38,.42);display:flex;align-items:center;justify-content:center}
+.md{width:660px;background:#fff;border-radius:22px;box-shadow:0 30px 80px -20px rgba(8,28,38,.45),0 0 0 1px rgba(12,38,50,.06);display:flex;flex-direction:column;overflow:hidden}
+.md .mh{padding:26px 30px 0;display:flex;justify-content:space-between;align-items:flex-start}
+.md .mh .k{font-size:13px;color:var(--faint)} .md .mh h3{font-family:var(--disp);font-size:26px;line-height:31px;font-weight:600;letter-spacing:-.02em;margin-top:4px}
+.md .x{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:#3B4750;flex:none}
+.md .ds{padding:10px 30px 0;font-size:15px;line-height:22px;color:var(--muted)}
+.md .pv{margin:18px 30px 0;border-radius:14px;background:#F6F8F9;padding:2px 18px}
+.md .pv .kvr{height:39px;font-size:14.5px}
+.md .pv .kvr .cnt{height:22px;line-height:22px;font-size:12px;padding:0 10px;margin-left:8px;font-weight:600}
+.md .nt{margin:14px 30px 0;font-size:13.5px;line-height:20px;color:var(--muted)} .md .nt b{color:var(--ink);font-weight:600}
+.md .ck{margin:16px 30px 0;display:flex;gap:12px;align-items:center;font-size:14.5px;line-height:21px;color:var(--ink);font-weight:500}
+.md .ck .cb{width:22px;height:22px}
+.md .cb.on{background:var(--petrol);border-color:var(--petrol);display:flex;align-items:center;justify-content:center}
+.md .mf{margin-top:22px;padding:16px 30px;border-top:1px solid #EEF1F3;display:flex;align-items:center;justify-content:space-between}
+.md .mf .who{font-size:13px;line-height:18px;color:var(--faint)} .md .mf .who b{display:block;font-size:14px;color:var(--ink);font-weight:600}
+.md .mf .bs{display:flex;gap:8px}
+</style>"""
+    def modal(on):
+        chk='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5 5.5 10.5 11.5 3.5"/></svg>' if on else ''
+        rows=[('Target equipment','EVAP-FZB-02, EVAP-FZB-03'),('Controller','CTRL-FZB-03'),('Maximum run time','30 minutes'),('Expected additional demand','+3.5 kW'),('Policy','POL-COLD-07<span class="cnt" style="background:#DDF1E4;color:#1B6B3A">Passed</span>'),('Safety lockouts','None active'),('Temperature setpoint','Unchanged'),('Verification','Airflow response within 3 minutes')]
+        rh=''.join(f'<div class="kvr"><span>{k}</span><b>{v}</b></div>' for k,v in rows)
+        return f'''<div class="scrim"><div class="md"><div class="mh"><div><span class="k">ACT-1184 for EXC-2417, Frozen Zone B</span><h3>Approve backup evaporator mode</h3></div><span class="x">{icon("close",16,1.75)}</span></div>
+<div class="ds">Authorize this action for dispatch by an approved control-room operator. Approval does not start the equipment.</div>
+<div class="pv">{rh}</div>
+<div class="nt"><b>Any change to the approved parameters requires a new approval.</b> The platform records the approver, timestamp, policy version and exact approved parameters.</div>
+<div class="ck"><div class="cb {"on" if on else ""}">{chk}</div><span>I reviewed the equipment, operating limits and verification requirements.</span></div>
+<div class="mf"><div class="who">Approving as<b>Felix Whitaker, Facility Operations Manager</b></div><div class="bs"><span class="btn o">Cancel</span><span class="btn p {"" if on else "dis"}">Approve ACT-1184{icon("arrow",16,1.75)}</span></div></div></div></div>'''
+    import os
+    for on,name in ((False,'action-desktop-approve'),(True,'action-desktop-approve-checked')):
+        h=build().replace('</style>',MCSS[7:-8]+'</style>',1).replace('</body>',modal(on)+'</body>')
+        render(h,f'{ROOT}/out/{name}.png',1600,1000,1.6)
+    for stt,name in (('approved','action-desktop-approved'),('approved-noperm','action-desktop-approved-noperm')):
+        os.environ['ACT_STATE']=stt
+        render(build(),f'{ROOT}/out/{name}.png',1600,1000,1.6)
+    os.environ['ACT_STATE']='approved'
+    DCSS=""".md.d .pv{margin-top:14px;padding:2px 18px} .md.d .pv .kvr{height:34px;font-size:14px}
+.md.d .ds{padding-top:8px}
+.md.d .af{margin:14px 30px 0;border-radius:14px;background:#EEF3F6;padding:14px 18px}
+.md.d .af b{display:block;font-size:14.5px;line-height:20px;font-weight:600;color:var(--ink)} .md.d .af p{font-size:14px;line-height:21px;color:var(--muted);margin-top:3px}
+.md.d .rc{margin:14px 30px 0;font-size:13px;color:var(--faint)}
+.md.d .rc .ch{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap} .md.d .rc .ch span{font-size:13.5px;color:var(--ink);border:1px solid #DCE2E7;border-radius:99px;padding:5px 12px;font-weight:500}
+.md.d .mf{margin-top:18px}"""
+    rows=[('Facility','BCD-01, Baltimore'),('Controller','CTRL-FZB-03'),('Equipment','EVAP-FZB-02 and EVAP-FZB-03'),('Maximum duration','30 minutes'),('Estimated additional demand','+3.5 kW'),('Temperature setpoints','Unchanged'),('Active safety lockouts','None'),('Approval','Felix Whitaker, 10:25 EST'),('Policy','POL-COLD-07<span class="cnt" style="background:#DDF1E4;color:#1B6B3A">Passed</span>')]
+    rh=''.join(f'<div class="kvr"><span>{k}</span><b>{v}</b></div>' for k,v in rows)
+    m2=f'''<div class="scrim"><div class="md d"><div class="mh"><div><span class="k">ACT-1184 for EXC-2417, Frozen Zone B</span><h3>Send backup mode to controller?</h3></div><span class="x">{icon("close",16,1.75)}</span></div>
+<div class="ds">ACT-1184 will request the approved backup evaporator sequence for Frozen Zone B.</div>
+<div class="pv">{rh}</div>
+<div class="rc">Rechecked immediately before sending<div class="ch"><span>Permission</span><span>Controller data freshness</span><span>Approval validity</span><span>Safety policy</span></div></div>
+<div class="af"><b>After dispatch</b><p>The system will wait for controller acknowledgement, then check the physical airflow response. Sending the command does not confirm successful equipment operation.</p></div>
+<div class="mf"><div class="who">Sending as<b>Luis Ortega, Control-room Operator</b></div><div class="bs"><span class="btn o">Cancel</span><span class="btn p">Send to controller{icon("arrow",16,1.75)}</span></div></div></div></div>'''
+    h=build().replace('</style>',MCSS[7:-8]+DCSS+'</style>',1).replace('</body>',m2+'</body>')
+    render(h,f'{ROOT}/out/action-desktop-send.png',1600,1000,1.6)
+    os.environ['ACT_STATE']='queued'
+    render(build(),f'{ROOT}/out/action-desktop-queued.png',1600,1000,1.6)
